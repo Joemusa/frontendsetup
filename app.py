@@ -60,7 +60,7 @@ developers = {
     "John Smith": "john@gmail.com",
     "Sarah Johnson": "sarah@gmail.com",
     "Michael Brown": "michael@gmail.com",
-    "Joseph Hlongwane": "joseph@gmail.com"
+    "Joseph Hlongwane": "josephhlongwane17@gmail.com"
 }
 
 # =========================================================

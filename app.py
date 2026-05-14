@@ -9,6 +9,10 @@ from email.mime.multipart import MIMEMultipart
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+
+st.write(st.secrets["gcp_service_account"]["client_email"])
+
+
 # =========================================================
 # PAGE CONFIG
 # =========================================================

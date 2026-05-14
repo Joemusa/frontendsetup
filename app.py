@@ -34,21 +34,16 @@ st.success("Authenticated")
 try:
 
     file_metadata = {
-        'name': 'Test File',
-        'mimeType': 'application/vnd.google-apps.document'
+    'name': document_title,
+    'mimeType': 'application/vnd.google-apps.document',
+    'parents': [folder_id]
     }
-
+    
     file = drive_service.files().create(
         body=file_metadata
     ).execute()
-
-    st.success("Google Doc Created")
-
-    st.write(file)
-
-except Exception as e:
-
-    st.error(e)
+    
+    document_id = file.get('id')
 
 
 # # =========================================================

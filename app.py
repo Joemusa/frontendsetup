@@ -21,7 +21,7 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
-st.write(st.secrets["gcp_service_account"]["frontendsetup@rentabuka.iam.gserviceaccount.com"])
+#st.write(st.secrets["gcp_service_account"]["frontendsetup@rentabuka.iam.gserviceaccount.com"])
 
 
 # =========================================================

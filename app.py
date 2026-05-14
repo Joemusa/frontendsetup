@@ -143,8 +143,8 @@ def send_email(
     priority
 ):
 
-    sender_email = "YOUR_EMAIL@gmail.com"
-    sender_password = "YOUR_APP_PASSWORD"
+    sender_email = "josephhlongwane17@gmail.com"
+    sender_password = "pkwq iaqn udue tpvh"
 
     link = f"http://localhost:8501/?request_id={request_id}"
 

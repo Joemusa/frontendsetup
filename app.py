@@ -22,6 +22,31 @@ st.set_page_config(
 )
 
 # =========================================================
+# SESSION STATE DEFAULTS
+# =========================================================
+
+default_values = {
+
+    "report_name": "",
+    "client_name": "",
+    "business_unit": "",
+    "requested_by": "",
+    "priority": "Medium",
+    "report_purpose": "",
+    "custom_visible_filters": "",
+    "custom_hidden_filters": "",
+    "analyze_further_required": "No",
+    "additional_notes": ""
+
+}
+
+for key, value in default_values.items():
+
+    if key not in st.session_state:
+
+        st.session_state[key] = value
+
+# =========================================================
 # GOOGLE AUTH
 # =========================================================
 

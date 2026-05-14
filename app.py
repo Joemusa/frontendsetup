@@ -52,7 +52,7 @@ drive_service = build(
 # =========================================================
 
 # REPLACE THIS WITH YOUR REAL FOLDER ID
-folder_id = "YOUR_GOOGLE_DRIVE_FOLDER_ID"
+folder_id = "1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x"
 
 # =========================================================
 # DEVELOPERS
@@ -290,10 +290,10 @@ def send_email(
     doc_link
 ):
 
-    sender_email = "YOUR_GMAIL@gmail.com"
+    sender_email = "josephhlongwane17@gmail.com"
 
     # GOOGLE APP PASSWORD
-    sender_password = "YOUR_APP_PASSWORD"
+    sender_password = "pkwq iaqn udue tpvh"
 
     subject = f"New Report Request - {report_name}"
 
@@ -449,17 +449,6 @@ visible_filters = st.multiselect(
     filters,
     help="Filters visible to end users"
 )
-# =========================================================
-# VISIBLE FILTERS
-# =========================================================
-
-st.subheader("📂 Visible Filters")
-
-visible_filters = st.multiselect(
-    "Select Visible Filters *",
-    filters,
-    help="Filters visible to end users"
-)
 
 # CUSTOM VISIBLE FILTERS
 custom_visible_filters = st.text_area(
@@ -474,23 +463,12 @@ custom_visible_filters_list = [
     if x.strip()
 ]
 
-# COMBINE FILTERS
+# FINAL VISIBLE FILTERS
 all_visible_filters = (
     visible_filters +
     custom_visible_filters_list
 )
 
-# =========================================================
-# HIDDEN FILTERS
-# =========================================================
-
-st.subheader("🔒 Hidden Filters")
-
-hidden_filters = st.multiselect(
-    "Select Hidden Filters",
-    filters,
-    help="Filters applied behind the scenes"
-)
 # =========================================================
 # HIDDEN FILTERS
 # =========================================================
@@ -516,7 +494,7 @@ custom_hidden_filters_list = [
     if x.strip()
 ]
 
-# COMBINE FILTERS
+# FINAL HIDDEN FILTERS
 all_hidden_filters = (
     hidden_filters +
     custom_hidden_filters_list
@@ -610,7 +588,7 @@ form_complete = all([
     business_unit,
     requested_by,
     report_purpose,
-    len(visible_filters) > 0,
+    len(all_visible_filters) > 0,,
     len(selected_query_actions) > 0
 ])
 
@@ -654,8 +632,8 @@ if submit_button:
         priority,
         str(date_required),
         report_purpose,
-        visible_filters,
-        hidden_filters,
+        all_visible_filters,
+        all_hidden_filters,
         analyze_further_required,
         selected_query_actions,
         selected_meta_actions,

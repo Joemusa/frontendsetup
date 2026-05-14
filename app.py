@@ -53,6 +53,10 @@ try:
     st.success("Google Doc Created")
     
     st.write(document_id)
+
+except Exception as e:
+
+    st.error(e)
 # # =========================================================
 # # PAGE CONFIG
 # # =========================================================

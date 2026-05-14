@@ -588,7 +588,7 @@ form_complete = all([
     business_unit,
     requested_by,
     report_purpose,
-    len(all_visible_filters) > 0,,
+    len(all_visible_filters) > 0,
     len(selected_query_actions) > 0
 ])
 

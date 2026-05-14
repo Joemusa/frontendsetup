@@ -449,6 +449,36 @@ visible_filters = st.multiselect(
     filters,
     help="Filters visible to end users"
 )
+# =========================================================
+# VISIBLE FILTERS
+# =========================================================
+
+st.subheader("📂 Visible Filters")
+
+visible_filters = st.multiselect(
+    "Select Visible Filters *",
+    filters,
+    help="Filters visible to end users"
+)
+
+# CUSTOM VISIBLE FILTERS
+custom_visible_filters = st.text_area(
+    "Add Custom Visible Filters",
+    help="Enter filters separated by commas"
+)
+
+# CONVERT CUSTOM FILTERS TO LIST
+custom_visible_filters_list = [
+    x.strip()
+    for x in custom_visible_filters.split(",")
+    if x.strip()
+]
+
+# COMBINE FILTERS
+all_visible_filters = (
+    visible_filters +
+    custom_visible_filters_list
+)
 
 # =========================================================
 # HIDDEN FILTERS
@@ -460,6 +490,36 @@ hidden_filters = st.multiselect(
     "Select Hidden Filters",
     filters,
     help="Filters applied behind the scenes"
+)
+# =========================================================
+# HIDDEN FILTERS
+# =========================================================
+
+st.subheader("🔒 Hidden Filters")
+
+hidden_filters = st.multiselect(
+    "Select Hidden Filters",
+    filters,
+    help="Filters applied behind the scenes"
+)
+
+# CUSTOM HIDDEN FILTERS
+custom_hidden_filters = st.text_area(
+    "Add Custom Hidden Filters",
+    help="Enter filters separated by commas"
+)
+
+# CONVERT TO LIST
+custom_hidden_filters_list = [
+    x.strip()
+    for x in custom_hidden_filters.split(",")
+    if x.strip()
+]
+
+# COMBINE FILTERS
+all_hidden_filters = (
+    hidden_filters +
+    custom_hidden_filters_list
 )
 
 # =========================================================

@@ -268,10 +268,9 @@ ADDITIONAL NOTES
 
     # MOVE FILE TO DRIVE FOLDER
     drive_service.files().update(
-        fileId=document_id,
-        addParents=folder_id,
-        removeParents='root',
-        fields='id, parents'
+    fileId=document_id,
+    addParents=folder_id,
+    fields='id, parents'
     ).execute()
 
     doc_link = (

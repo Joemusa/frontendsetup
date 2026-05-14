@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import sqlite3
 from datetime import datetime
 import uuid
 import smtplib
@@ -17,42 +16,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# =========================================================
-# DATABASE
-# =========================================================
-
-conn = sqlite3.connect(
-    "report_requests.db",
-    check_same_thread=False
-)
-
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS requests (
-    request_id TEXT,
-    submission_date TEXT,
-    report_name TEXT,
-    client_name TEXT,
-    business_unit TEXT,
-    requested_by TEXT,
-    developer_name TEXT,
-    developer_email TEXT,
-    priority TEXT,
-    date_required TEXT,
-    report_purpose TEXT,
-    visible_filters TEXT,
-    hidden_filters TEXT,
-    analyze_further_required TEXT,
-    query_actions TEXT,
-    meta_actions TEXT,
-    presentation_actions TEXT,
-    additional_notes TEXT,
-    status TEXT
-)
-""")
-
-conn.commit()
 
 # =========================================================
 # DEVELOPERS
@@ -495,19 +458,64 @@ else:
     # SUBMIT BUTTON
     # =====================================================
 
-    st.divider()
+    if submit_button:
 
-    if not form_complete:
+    request_id = (
+        f"RPT-{datetime.now().year}-"
+        f"{str(uuid.uuid4())[:8]}"
+    )
 
-        st.warning(
-            "Please complete all required fields."
+    # CREATE GOOGLE DOC
+    doc_link = create_google_doc(
+        request_id,
+        report_name,
+        requested_by,
+        visible_filters,
+        hidden_filters,
+        analyze_further_required,
+        selected_query_actions,
+        selected_meta_actions,
+        selected_presentation_actions,
+        additional_notes
+    )
+
+    # SEND EMAIL
+    email_sent = send_email(
+        developer_email,
+        request_id,
+        report_name,
+        requested_by,
+        priority,
+        doc_link
+    )
+
+    st.success(
+        "✅ Request Submitted Successfully"
+    )
+
+    st.info(
+        f"Request ID: {request_id}"
+    )
+
+    st.success(
+        "📄 Google Requirements Document Created"
+    )
+
+    st.markdown(
+        f"[Open Requirements Document]({doc_link})"
+    )
+
+    if email_sent:
+
+        st.success(
+            "📧 Developer notification sent successfully"
         )
 
-    submit_button = st.button(
-        "🚀 Submit Request",
-        disabled=not form_complete,
-        use_container_width=True
-    )
+    else:
+
+        st.warning(
+            "Document created but email failed"
+        )
 
     # =====================================================
     # SAVE REQUEST
@@ -520,35 +528,6 @@ else:
             f"{str(uuid.uuid4())[:8]}"
         )
 
-        cursor.execute("""
-        INSERT INTO requests VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        )
-        """, (
-            request_id,
-            datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
-            report_name,
-            client_name,
-            business_unit,
-            requested_by,
-            developer_name,
-            developer_email,
-            priority,
-            str(date_required),
-            report_purpose,
-            ", ".join(visible_filters),
-            ", ".join(hidden_filters),
-            analyze_further_required,
-            ", ".join(selected_query_actions),
-            ", ".join(selected_meta_actions),
-            ", ".join(selected_presentation_actions),
-            additional_notes,
-            "New"
-        ))
-
-        conn.commit()
 
         email_sent = send_email(
             developer_email,

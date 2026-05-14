@@ -10,7 +10,6 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 
-st.write(st.secrets["gcp_service_account"]["client_email"])
 
 
 # =========================================================
@@ -22,6 +21,8 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+st.write(st.secrets["gcp_service_account"]["client_email"])
+
 
 # =========================================================
 # GOOGLE CONFIG

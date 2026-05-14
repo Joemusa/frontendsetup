@@ -44,7 +44,9 @@ try:
     ).execute()
     
     document_id = file.get('id')
+except Exception as e:
 
+    st.error(e)
 
 # # =========================================================
 # # PAGE CONFIG

@@ -38,24 +38,21 @@ document_title = "Test Document"
 try:
 
     file_metadata = {
-        'name': document_title,
-        'mimeType': 'application/vnd.google-apps.document',
-        'parents': [folder_id]
+    'name': document_title,
+    'mimeType': 'application/vnd.google-apps.document',
+    'parents': [folder_id]
     }
-
+    
     file = drive_service.files().create(
-        body=file_metadata
+        body=file_metadata,
+        supportsAllDrives=True
     ).execute()
-
+    
     document_id = file.get('id')
-
+    
     st.success("Google Doc Created")
-
+    
     st.write(document_id)
-
-except Exception as e:
-
-    st.error(e)
 # # =========================================================
 # # PAGE CONFIG
 # # =========================================================

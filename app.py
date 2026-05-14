@@ -59,7 +59,7 @@ conn.commit()
 # =========================================================
 
 developers = {
-    "Joseph Hlongwane": "your_email@gmail.com",
+    "Joseph Hlongwane": "josephhlongwane17@gmail.com",
     "John Smith": "john@gmail.com",
     "Sarah Johnson": "sarah@gmail.com",
     "Michael Brown": "michael@gmail.com"
@@ -145,10 +145,10 @@ def send_email(
     priority
 ):
 
-    sender_email = "YOUR_GMAIL@gmail.com"
+    sender_email = "josephhlongwane17@gmail.com"
 
     # APP PASSWORD FROM GOOGLE
-    sender_password = "YOUR_APP_PASSWORD"
+    sender_password = "pkwq iaqn udue tpvh"
 
     # UPDATE AFTER DEPLOYMENT
     link = f"http://localhost:8501/?request_id={request_id}"

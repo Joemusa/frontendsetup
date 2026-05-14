@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS requests (
     priority TEXT,
     date_required TEXT,
     report_purpose TEXT,
-    filters TEXT,
+    visible_filters TEXT,
+    hidden_filters TEXT,
+    analyze_further_required TEXT,
     query_actions TEXT,
     meta_actions TEXT,
     presentation_actions TEXT,
@@ -53,14 +55,14 @@ CREATE TABLE IF NOT EXISTS requests (
 conn.commit()
 
 # =========================================================
-# DEVELOPER LIST
+# DEVELOPERS
 # =========================================================
 
 developers = {
+    "Joseph Hlongwane": "your_email@gmail.com",
     "John Smith": "john@gmail.com",
     "Sarah Johnson": "sarah@gmail.com",
-    "Michael Brown": "michael@gmail.com",
-    "Joseph Hlongwane": "josephhlongwane17@gmail.com"
+    "Michael Brown": "michael@gmail.com"
 }
 
 # =========================================================
@@ -143,11 +145,13 @@ def send_email(
     priority
 ):
 
-    sender_email = "josephhlongwane17@gmail.com"
-    sender_password = "pkwq iaqn udue tpvh"
+    sender_email = "YOUR_GMAIL@gmail.com"
 
-    #link = f"http://localhost:8501/?request_id={request_id}"
-    link = f"https://report-config-portal.streamlit.app/?request_id={request_id}"
+    # APP PASSWORD FROM GOOGLE
+    sender_password = "YOUR_APP_PASSWORD"
+
+    # UPDATE AFTER DEPLOYMENT
+    link = f"http://localhost:8501/?request_id={request_id}"
 
     subject = f"New Report Request - {report_name}"
 
@@ -202,7 +206,7 @@ Report Configuration Portal
         return False
 
 # =========================================================
-# CHECK URL PARAMETERS
+# URL PARAMETERS
 # =========================================================
 
 query_params = st.query_params
@@ -238,7 +242,9 @@ if request_id_from_url:
             "Priority",
             "Date Required",
             "Report Purpose",
-            "Filters",
+            "Visible Filters",
+            "Hidden Filters",
+            "Analyze Further",
             "Query Actions",
             "Meta Actions",
             "Presentation Actions",
@@ -251,27 +257,62 @@ if request_id_from_url:
             columns=columns
         )
 
+        st.success("Request Loaded Successfully")
+
         st.dataframe(
             request_df,
             use_container_width=True
         )
+
+        st.divider()
+
+        st.subheader("Update Status")
+
+        status = st.selectbox(
+            "Select Status",
+            [
+                "New",
+                "In Progress",
+                "Testing",
+                "Completed"
+            ]
+        )
+
+        if st.button("Update Status"):
+
+            cursor.execute("""
+            UPDATE requests
+            SET status = ?
+            WHERE request_id = ?
+            """, (
+                status,
+                request_id_from_url
+            ))
+
+            conn.commit()
+
+            st.success("Status Updated")
 
     else:
 
         st.error("Request Not Found")
 
 # =========================================================
-# SUBMISSION FORM
+# SUBMISSION PAGE
 # =========================================================
 
 else:
 
     st.title("📊 Report Configuration Request Portal")
 
+    st.markdown(
+        "Submit report requirements for the development team."
+    )
+
     st.divider()
 
     # =====================================================
-    # BASIC INFO
+    # BASIC INFORMATION
     # =====================================================
 
     col1, col2, col3 = st.columns(3)
@@ -324,19 +365,48 @@ else:
 
     st.divider()
 
+    # =====================================================
+    # REPORT PURPOSE
+    # =====================================================
+
     report_purpose = st.text_area(
         "Report Purpose *"
     )
 
     # =====================================================
-    # FILTERS
+    # VISIBLE FILTERS
     # =====================================================
 
-    st.subheader("📂 Filters")
+    st.subheader("📂 Visible Filters")
 
-    selected_filters = st.multiselect(
-        "Select Filters *",
-        filters
+    visible_filters = st.multiselect(
+        "Select Visible Filters *",
+        filters,
+        help="Filters visible to users"
+    )
+
+    # =====================================================
+    # HIDDEN FILTERS
+    # =====================================================
+
+    st.subheader("🔒 Hidden Filters")
+
+    hidden_filters = st.multiselect(
+        "Select Hidden Filters",
+        filters,
+        help="Filters applied behind the scenes"
+    )
+
+    # =====================================================
+    # ANALYZE FURTHER
+    # =====================================================
+
+    st.subheader("📈 Analyze Further")
+
+    analyze_further_required = st.radio(
+        "Enable Analyze Further?",
+        ["Yes", "No"],
+        horizontal=True
     )
 
     # =====================================================
@@ -376,7 +446,7 @@ else:
             selected_meta_actions.append(action)
 
     # =====================================================
-    # PRESENTATION ACTIONS
+    # PRESENTATION OPTIONS
     # =====================================================
 
     st.subheader("🖥 Presentation Options")
@@ -415,7 +485,7 @@ else:
         business_unit,
         requested_by,
         report_purpose,
-        len(selected_filters) > 0,
+        len(visible_filters) > 0,
         len(selected_query_actions) > 0
     ])
 
@@ -428,7 +498,7 @@ else:
     if not form_complete:
 
         st.warning(
-            "Please complete all required fields before submitting."
+            "Please complete all required fields."
         )
 
     submit_button = st.button(
@@ -450,7 +520,7 @@ else:
 
         cursor.execute("""
         INSERT INTO requests VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
         """, (
             request_id,
@@ -466,7 +536,9 @@ else:
             priority,
             str(date_required),
             report_purpose,
-            ", ".join(selected_filters),
+            ", ".join(visible_filters),
+            ", ".join(hidden_filters),
+            analyze_further_required,
             ", ".join(selected_query_actions),
             ", ".join(selected_meta_actions),
             ", ".join(selected_presentation_actions),
@@ -495,7 +567,7 @@ else:
         if email_sent:
 
             st.success(
-                "📧 Developer notification sent"
+                "📧 Developer notification sent successfully"
             )
 
         else:

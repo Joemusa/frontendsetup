@@ -58,6 +58,8 @@ drive_service = build(
 # REPLACE THIS WITH YOUR REAL FOLDER ID
 folder_id = "1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x"
 
+#https://drive.google.com/drive/folders/1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x?usp=sharing
+
 # =========================================================
 # DEVELOPERS
 # =========================================================

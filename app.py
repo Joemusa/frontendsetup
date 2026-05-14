@@ -164,8 +164,10 @@ Report Name: {report_name}
 Requested By: {requested_by}
 Priority: {priority}
 
-Open Request:
-{link}
+#Open Request:
+#{link}
+Open Google Requirements Document:
+{doc_link}
 
 Regards,
 Report Configuration Portal
@@ -575,3 +577,131 @@ else:
             st.warning(
                 "Request saved but email failed"
             )
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
+# =====================================================
+# GOOGLE SETUP
+# =====================================================
+
+SCOPES = [
+    'https://www.googleapis.com/auth/documents',
+    'https://www.googleapis.com/auth/drive'
+]
+
+SERVICE_ACCOUNT_FILE = 'credentials.json'
+
+credentials = service_account.Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE,
+    scopes=SCOPES
+)
+
+docs_service = build(
+    'docs',
+    'v1',
+    credentials=credentials
+)
+
+drive_service = build(
+    'drive',
+    'v3',
+    credentials=credentials
+)
+
+# =====================================================
+# CREATE GOOGLE DOC
+# =====================================================
+
+def create_google_doc(
+    request_id,
+    report_name,
+    requested_by,
+    visible_filters,
+    hidden_filters,
+    analyze_further_required,
+    query_actions,
+    meta_actions,
+    presentation_actions,
+    additional_notes
+):
+
+    document_title = (
+        f"{request_id} - {report_name}"
+    )
+
+    # CREATE DOC
+    doc = docs_service.documents().create(
+        body={"title": document_title}
+    ).execute()
+
+    document_id = doc.get('documentId')
+
+    content = f"""
+Report Configuration Request
+
+Request ID:
+{request_id}
+
+Report Name:
+{report_name}
+
+Requested By:
+{requested_by}
+
+VISIBLE FILTERS:
+{', '.join(visible_filters)}
+
+HIDDEN FILTERS:
+{', '.join(hidden_filters)}
+
+ANALYZE FURTHER:
+{analyze_further_required}
+
+QUERY ACTIONS:
+{', '.join(query_actions)}
+
+META ACTIONS:
+{', '.join(meta_actions)}
+
+PRESENTATION OPTIONS:
+{', '.join(presentation_actions)}
+
+ADDITIONAL NOTES:
+{additional_notes}
+"""
+
+    requests = [
+        {
+            'insertText': {
+                'location': {
+                    'index': 1
+                },
+                'text': content
+            }
+        }
+    ]
+
+    docs_service.documents().batchUpdate(
+        documentId=document_id,
+        body={'requests': requests}
+    ).execute()
+
+    # =================================================
+    # MOVE FILE TO GOOGLE DRIVE FOLDER
+    # =================================================
+
+    folder_id = "1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x"
+
+    drive_service.files().update(
+        fileId=document_id,
+        addParents=folder_id,
+        removeParents='root',
+        fields='id, parents'
+    ).execute()
+
+    doc_link = (
+        f"https://docs.google.com/document/d/"
+        f"{document_id}/edit"
+    )
+
+    return doc_link

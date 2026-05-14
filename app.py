@@ -31,23 +31,31 @@ drive_service = build(
 
 st.success("Authenticated")
 
+folder_id = "1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x"
+
+document_title = "Test Document"
+
 try:
 
     file_metadata = {
-    'name': document_title,
-    'mimeType': 'application/vnd.google-apps.document',
-    'parents': [folder_id]
+        'name': document_title,
+        'mimeType': 'application/vnd.google-apps.document',
+        'parents': [folder_id]
     }
-    
+
     file = drive_service.files().create(
         body=file_metadata
     ).execute()
-    
+
     document_id = file.get('id')
+
+    st.success("Google Doc Created")
+
+    st.write(document_id)
+
 except Exception as e:
 
     st.error(e)
-
 # # =========================================================
 # # PAGE CONFIG
 # # =========================================================

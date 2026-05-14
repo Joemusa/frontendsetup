@@ -146,7 +146,8 @@ def send_email(
     sender_email = "josephhlongwane17@gmail.com"
     sender_password = "pkwq iaqn udue tpvh"
 
-    link = f"http://localhost:8501/?request_id={request_id}"
+    #link = f"http://localhost:8501/?request_id={request_id}"
+    link = f"https://report-config-portal.streamlit.app/?request_id={request_id}"
 
     subject = f"New Report Request - {report_name}"
 

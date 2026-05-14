@@ -59,7 +59,7 @@ folder_id = "1dlfdV-sfjC1n092FL1bNR3fbHtZ6fz-x"
 # =========================================================
 
 developers = {
-    "Joseph Hlongwane": "your_email@gmail.com",
+    "Joseph Hlongwane": "josephhlongwane17@gmail.com",
     "John Smith": "john@gmail.com",
     "Sarah Johnson": "sarah@gmail.com",
     "Michael Brown": "michael@gmail.com"

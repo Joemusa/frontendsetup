@@ -734,3 +734,271 @@ with request_tab:
             st.error(
                 f"Submission Error: {e}"
             )
+# Adding a Data Engineering Tab to Your Streamlit App
+
+You can add a dedicated tab for Data Engineers so they can:
+
+* view submitted requests
+* update statuses
+* add technical notes
+* capture ETL requirements
+* add source/target tables
+* track pipeline dependencies
+* update Jira ticket information
+
+---
+
+# STEP 1 — CREATE TABS
+
+Add this near the top of your app:
+
+```python
+# =========================================================
+# TABS
+# =========================================================
+
+request_tab, engineer_tab = st.tabs([
+    "📋 Report Request Form",
+    "⚙️ Data Engineering"
+])
+```
+
+---
+
+# STEP 2 — MOVE CURRENT FORM INTO REQUEST TAB
+
+Wrap your current request form inside:
+
+```python
+with request_tab:
+```
+
+Example:
+
+```python
+with request_tab:
+
+    st.title("📋 Front-End Report Setup")
+
+    # ALL YOUR CURRENT FORM CODE HERE
+```
+
+---
+
+# STEP 3 — CREATE DATA ENGINEERING TAB
+
+with engineer_tab:
+
+    st.title("⚙️ Data Engineering Workspace")
+
+    st.subheader("Pipeline Configuration")
+
+    source_system = st.text_input(
+        "Source System"
+    )
+
+    source_table = st.text_input(
+        "Source Table"
+    )
+
+    target_table = st.text_input(
+        "Target Table"
+    )
+
+    refresh_frequency = st.selectbox(
+        "Refresh Frequency",
+        [
+            "Hourly",
+            "Daily",
+            "Weekly",
+            "Monthly"
+        ]
+    )
+
+    load_type = st.selectbox(
+        "Load Type",
+        [
+            "Full Load",
+            "Incremental Load"
+        ]
+    )
+
+    pipeline_required = st.selectbox(
+        "Pipeline Required?",
+        [
+            "Yes",
+            "No"
+        ]
+    )
+
+    estimated_data_volume = st.selectbox(
+        "Estimated Data Volume",
+        [
+            "Small",
+            "Medium",
+            "Large",
+            "Very Large"
+        ]
+    )
+
+    transformation_rules = st.text_area(
+        "Transformation Rules"
+    )
+
+    business_logic = st.text_area(
+        "Business Logic"
+    )
+
+    dependencies = st.text_area(
+        "Dependencies"
+    )
+
+    engineering_notes = st.text_area(
+        "Engineering Notes"
+    )
+```
+
+---
+
+# STEP 4 — STATUS MANAGEMENT
+
+Add:
+
+```python
+st.subheader("Request Status")
+
+status = st.selectbox(
+    "Status",
+    [
+        "New",
+        "In Progress",
+        "Waiting for Business",
+        "In Testing",
+        "Completed",
+        "Blocked"
+    ]
+)
+
+# JIRA TRACKING
+
+Add:
+
+st.subheader("Jira Tracking")
+
+jira_ticket = st.text_input(
+    "Jira Ticket"
+)
+
+jira_link = st.text_input(
+    "Jira Link"
+)
+```
+
+---
+
+# STEP 6 — SAVE ENGINEERING DETAILS TO GOOGLE SHEETS
+
+Create another Google Sheet tab called:
+
+```text
+Data_Engineering
+```
+
+Then save:
+
+```python
+engineering_sheet.append_row([
+
+    request_id,
+    source_system,
+    source_table,
+    target_table,
+    refresh_frequency,
+    load_type,
+    pipeline_required,
+    estimated_data_volume,
+    transformation_rules,
+    business_logic,
+    dependencies,
+    engineering_notes,
+    status,
+    jira_ticket,
+    jira_link
+
+])
+```
+
+---
+
+# STEP 7 — OPTIONAL FEATURES
+
+You can later add:
+
+## 1. SQL Upload
+
+```python
+uploaded_sql = st.file_uploader(
+    "Upload SQL Script"
+)
+```
+
+---
+
+## 2. Pipeline Diagram Upload
+
+```python
+pipeline_diagram = st.file_uploader(
+    "Upload Pipeline Diagram"
+)
+```
+
+---
+
+## 3. Developer Assignment
+
+```python
+assigned_engineer = st.selectbox(
+    "Assigned Engineer",
+    [
+        "Joseph",
+        "Engineer 2",
+        "Engineer 3"
+    ]
+)
+```
+
+---
+
+## 4. SLA Tracking
+
+```python
+estimated_completion = st.date_input(
+    "Estimated Completion Date"
+)
+```
+
+---
+
+# FINAL RESULT
+
+Your solution becomes:
+
+```text
+Client Facing Teams
+        ↓
+Report Intake Portal
+        ↓
+Google Sheets Storage
+        ↓
+Jira Ticket Auto-Creation
+        ↓
+Data Engineering Workspace
+        ↓
+Pipeline Development
+        ↓
+Status Tracking
+        ↓
+Delivery
+```
+
+This becomes a full operational request management platform.

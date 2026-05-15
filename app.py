@@ -88,22 +88,24 @@ developers = {
 # =========================================================
 
 filters = [
-    "Campaigns",
-    "Daily Sales and Stock",
+    "Sub Location",
+    "Brand",
     "Date",
-    "Date Range",
-    "Dim Business Unit",
-    "Dim Calendar",
-    "Dim Categories",
-    "Dim Location",
-    "Dim Products",
-    "Dim Retailer",
-    "Employee",
-    "FactPhoto",
-    "Incremental Value",
-    "Locations MDM",
-    "LSU Adjusted",
-    "Macro Data"
+    "SKU Format",
+    "Buyability Points Category",
+    "Principle",
+    "CallID",
+    "Facia",
+    "PersonID",
+    "VisitDate",
+    "Region Name",
+    "Period",
+    "Segment",
+    "Territory",
+    "Date",
+    "Facia",
+    "Cycle",
+    "Name"
 ]
 
 # =========================================================
@@ -388,6 +390,17 @@ st.subheader("📈 Analyze Further")
 
 analyze_further_required = st.radio(
     "Enable Analyze Further?",
+    ["Yes", "No"],
+    horizontal=True
+)
+# =========================================================
+# PRODUCTION EXCEPTION REPORT
+# =========================================================
+
+st.subheader("📈 Production Exception Report")
+
+exception_report_required = st.radio(
+    "Enable Production Exception Report?",
     ["Yes", "No"],
     horizontal=True
 )

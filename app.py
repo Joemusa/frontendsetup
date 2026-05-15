@@ -673,13 +673,13 @@ if submit_button:
                 "Request saved but email failed"
             )
 
-       try:
-           jira_ticket = create_jira_ticket(
-               request_id,
-               report_name,
-               requested_by,
-               priority,
-               report_purpose,
+try:
+    jira_ticket = create_jira_ticket(
+        request_id,
+        report_name,
+        requested_by,
+        priority,
+        report_purpose,
                ", ".join(all_visible_filters),
                ", ".join(all_hidden_filters),
                developer_name

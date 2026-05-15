@@ -808,15 +808,7 @@ with engineer_tab:
     engineering_notes = st.text_area(
         "Engineering Notes"
     )
-```
-
----
-
 # STEP 4 — STATUS MANAGEMENT
-
-Add:
-
-```python
 st.subheader("Request Status")
 
 status = st.selectbox(
@@ -832,9 +824,6 @@ status = st.selectbox(
 )
 
 # JIRA TRACKING
-
-Add:
-
 st.subheader("Jira Tracking")
 
 jira_ticket = st.text_input(
@@ -844,21 +833,8 @@ jira_ticket = st.text_input(
 jira_link = st.text_input(
     "Jira Link"
 )
-```
-
----
-
 # STEP 6 — SAVE ENGINEERING DETAILS TO GOOGLE SHEETS
 
-Create another Google Sheet tab called:
-
-```text
-Data_Engineering
-```
-
-Then save:
-
-```python
 engineering_sheet.append_row([
 
     request_id,
@@ -878,9 +854,5 @@ engineering_sheet.append_row([
     jira_link
 
 ])
-```
-
----
-
 
 

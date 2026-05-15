@@ -36,6 +36,8 @@ default_values = {
     "custom_visible_filters": "",
     "custom_hidden_filters": "",
     "analyze_further_required": "No",
+    "exception_report_required": "No",
+    "usage_report_required": "No",
     "additional_notes": ""
 
 }

@@ -736,56 +736,8 @@ with request_tab:
             )
 # Adding a Data Engineering Tab to Your Streamlit App
 
-You can add a dedicated tab for Data Engineers so they can:
 
-* view submitted requests
-* update statuses
-* add technical notes
-* capture ETL requirements
-* add source/target tables
-* track pipeline dependencies
-* update Jira ticket information
 
----
-
-# STEP 1 — CREATE TABS
-
-Add this near the top of your app:
-
-```python
-# =========================================================
-# TABS
-# =========================================================
-
-request_tab, engineer_tab = st.tabs([
-    "📋 Report Request Form",
-    "⚙️ Data Engineering"
-])
-```
-
----
-
-# STEP 2 — MOVE CURRENT FORM INTO REQUEST TAB
-
-Wrap your current request form inside:
-
-```python
-with request_tab:
-```
-
-Example:
-
-```python
-with request_tab:
-
-    st.title("📋 Front-End Report Setup")
-
-    # ALL YOUR CURRENT FORM CODE HERE
-```
-
----
-
-# STEP 3 — CREATE DATA ENGINEERING TAB
 
 with engineer_tab:
 

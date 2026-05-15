@@ -735,132 +735,536 @@ with request_tab:
                 f"Submission Error: {e}"
             )
 
-with engineer_tab:
+# =====================================================
+# DATA MODEL REQUIREMENTS TAB
+# =====================================================
+
+with model_tab:
+
+    st.title(
+        "⚙️ Data Model Requirements"
+    )
 
     # =====================================================
-    # WORKSHEETS
+    # GOOGLE SHEETS WORKSHEETS
     # =====================================================
-    
+
     sheet = spreadsheet.worksheet(
         "Requests"
     )
-    
+
     engineering_sheet = spreadsheet.worksheet(
         "Data_Engineering"
     )
 
-    st.title("⚙️ Data Engineering Workspace")
+    # =====================================================
+    # REQUEST ID
+    # =====================================================
 
-    st.subheader("Pipeline Configuration")
-
-    source_system = st.text_input(
-        "Source System"
+    request_id = (
+        f"ENG-{datetime.now().year}-"
+        f"{str(uuid.uuid4())[:8]}"
     )
 
-    source_table = st.text_input(
-        "Source Table"
+    # =====================================================
+    # SOURCE SYSTEMS
+    # =====================================================
+
+    st.subheader(
+        "📥 Source Systems"
     )
 
-    target_table = st.text_input(
-        "Target Table"
+    available_source_systems = [
+
+        "SAP",
+        "SQL Server",
+        "Oracle",
+        "Snowflake",
+        "Excel",
+        "API",
+        "SharePoint",
+        "Google Sheets"
+
+    ]
+
+    selected_source_systems = st.multiselect(
+
+        "Select Source Systems",
+
+        available_source_systems
+
+    )
+
+    custom_source_system = st.text_input(
+        "Add Custom Source System"
+    )
+
+    if custom_source_system:
+
+        selected_source_systems.append(
+            custom_source_system
+        )
+
+    database_name = st.text_input(
+        "Database Name"
+    )
+
+    schema_name = st.text_input(
+        "Schema Name"
+    )
+
+    source_tables = st.text_area(
+        "Source Tables"
+    )
+
+    # =====================================================
+    # FACT TABLE
+    # =====================================================
+
+    st.subheader(
+        "📊 Fact Table Information"
+    )
+
+    fact_table = st.text_input(
+        "Fact Table Name"
+    )
+
+    granularity = st.selectbox(
+
+        "Granularity",
+
+        [
+
+            "One row per transaction",
+            "One row per customer",
+            "One row per product",
+            "One row per invoice",
+            "One row per store",
+            "Other"
+
+        ]
+    )
+
+    transaction_date_field = st.text_input(
+        "Transaction Date Field"
+    )
+
+    # =====================================================
+    # DIMENSIONS
+    # =====================================================
+
+    st.subheader(
+        "📚 Dimensions"
+    )
+
+    available_dimensions = [
+
+        "Customer",
+        "Product",
+        "Calendar",
+        "Retailer",
+        "Store",
+        "Region",
+        "Employee",
+        "Supplier",
+        "Brand"
+
+    ]
+
+    selected_dimensions = st.multiselect(
+
+        "Select Dimensions",
+
+        available_dimensions
+
+    )
+
+    custom_dimension = st.text_input(
+        "Add Custom Dimension"
+    )
+
+    if custom_dimension:
+
+        selected_dimensions.append(
+            custom_dimension
+        )
+
+    # =====================================================
+    # RELATIONSHIPS
+    # =====================================================
+
+    st.subheader(
+        "🔗 Relationships"
+    )
+
+    primary_keys = st.text_area(
+        "Primary Keys"
+    )
+
+    foreign_keys = st.text_area(
+        "Foreign Keys"
+    )
+
+    join_logic = st.text_area(
+        "Join Logic"
+    )
+
+    # =====================================================
+    # KPIs
+    # =====================================================
+
+    st.subheader(
+        "📈 KPIs / Measures"
+    )
+
+    available_kpis = [
+
+        "Sales",
+        "Volume",
+        "Margin",
+        "Profit",
+        "CSL",
+        "Fill Rate",
+        "Stock",
+        "Availability",
+        "Market Share"
+
+    ]
+
+    selected_kpis = st.multiselect(
+
+        "Select KPIs",
+
+        available_kpis
+
+    )
+
+    custom_kpi = st.text_input(
+        "Add Custom KPI"
+    )
+
+    if custom_kpi:
+
+        selected_kpis.append(
+            custom_kpi
+        )
+
+    calculations = st.text_area(
+        "Calculation Logic"
+    )
+
+    # =====================================================
+    # BUSINESS RULES
+    # =====================================================
+
+    st.subheader(
+        "📜 Business Rules"
+    )
+
+    business_rules = st.text_area(
+        "Business Rules"
+    )
+
+    exclusion_rules = st.text_area(
+        "Exclusion Rules"
+    )
+
+    # =====================================================
+    # REFRESH REQUIREMENTS
+    # =====================================================
+
+    st.subheader(
+        "🔄 Refresh Requirements"
     )
 
     refresh_frequency = st.selectbox(
+
         "Refresh Frequency",
+
         [
+
             "Hourly",
             "Daily",
             "Weekly",
-            "Monthly"
+            "Monthly",
+            "Real-Time"
+
         ]
     )
 
     load_type = st.selectbox(
+
         "Load Type",
+
         [
+
             "Full Load",
             "Incremental Load"
+
         ]
     )
 
-    pipeline_required = st.selectbox(
-        "Pipeline Required?",
+    historical_data_required = st.selectbox(
+
+        "Historical Data Required?",
+
         [
+
             "Yes",
             "No"
+
         ]
     )
 
-    estimated_data_volume = st.selectbox(
-        "Estimated Data Volume",
+    history_years = st.number_input(
+
+        "Years of History",
+
+        min_value=0,
+        max_value=20,
+        value=3
+
+    )
+
+    # =====================================================
+    # SECURITY
+    # =====================================================
+
+    st.subheader(
+        "🔐 Security Requirements"
+    )
+
+    row_level_security = st.selectbox(
+
+        "Row Level Security Required?",
+
         [
+
+            "Yes",
+            "No"
+
+        ]
+    )
+
+    security_rules = st.text_area(
+        "Security Rules"
+    )
+
+    # =====================================================
+    # OUTPUT REQUIREMENTS
+    # =====================================================
+
+    st.subheader(
+        "📤 Output Requirements"
+    )
+
+    output_tools = st.multiselect(
+
+        "Output Tools",
+
+        [
+
+            "Power BI",
+            "Pyramid",
+            "Excel",
+            "API",
+            "CSV",
+            "Google Sheets"
+
+        ]
+    )
+
+    export_required = st.selectbox(
+
+        "Export Required?",
+
+        [
+
+            "Yes",
+            "No"
+
+        ]
+    )
+
+    # =====================================================
+    # MODEL DESIGN
+    # =====================================================
+
+    st.subheader(
+        "🏗️ Model Design"
+    )
+
+    model_type = st.selectbox(
+
+        "Model Type",
+
+        [
+
+            "Star Schema",
+            "Snowflake",
+            "Flat Table",
+            "Data Mart"
+
+        ]
+    )
+
+    existing_model = st.selectbox(
+
+        "Existing Model Available?",
+
+        [
+
+            "Yes",
+            "No"
+
+        ]
+    )
+
+    existing_model_name = st.text_input(
+        "Existing Model Name"
+    )
+
+    # =====================================================
+    # PERFORMANCE
+    # =====================================================
+
+    st.subheader(
+        "⚡ Performance Requirements"
+    )
+
+    expected_users = st.number_input(
+
+        "Expected Number of Users",
+
+        min_value=1,
+        value=10
+
+    )
+
+    estimated_dataset_size = st.selectbox(
+
+        "Estimated Dataset Size",
+
+        [
+
             "Small",
             "Medium",
             "Large",
             "Very Large"
+
         ]
     )
 
-    transformation_rules = st.text_area(
-        "Transformation Rules"
+    performance_notes = st.text_area(
+        "Performance Notes"
     )
 
-    business_logic = st.text_area(
-        "Business Logic"
+    # =====================================================
+    # STATUS
+    # =====================================================
+
+    st.subheader(
+        "📌 Request Status"
     )
 
-    dependencies = st.text_area(
-        "Dependencies"
+    status = st.selectbox(
+
+        "Status",
+
+        [
+
+            "New",
+            "In Progress",
+            "Waiting for Business",
+            "In Testing",
+            "Completed",
+            "Blocked"
+
+        ]
+    )
+
+    # =====================================================
+    # JIRA
+    # =====================================================
+
+    st.subheader(
+        "🎫 Jira Tracking"
+    )
+
+    jira_ticket = st.text_input(
+        "Jira Ticket"
+    )
+
+    jira_link = st.text_input(
+        "Jira Link"
+    )
+
+    # =====================================================
+    # ENGINEERING NOTES
+    # =====================================================
+
+    st.subheader(
+        "📝 Engineering Notes"
     )
 
     engineering_notes = st.text_area(
         "Engineering Notes"
     )
-# STEP 4 — STATUS MANAGEMENT
-st.subheader("Request Status")
 
-status = st.selectbox(
-    "Status",
-    [
-        "New",
-        "In Progress",
-        "Waiting for Business",
-        "In Testing",
-        "Completed",
-        "Blocked"
-    ]
-)
+    # =====================================================
+    # SAVE BUTTON
+    # =====================================================
 
-# JIRA TRACKING
-st.subheader("Jira Tracking")
+    submit_engineering = st.button(
+        "💾 Save Engineering Requirements"
+    )
 
-jira_ticket = st.text_input(
-    "Jira Ticket"
-)
+    # =====================================================
+    # SAVE TO GOOGLE SHEETS
+    # =====================================================
 
-jira_link = st.text_input(
-    "Jira Link"
-)
-# STEP 6 — SAVE ENGINEERING DETAILS TO GOOGLE SHEETS
+    if submit_engineering:
 
-engineering_sheet.append_row([
+        engineering_sheet.append_row([
 
-    request_id,
-    source_system,
-    source_table,
-    target_table,
-    refresh_frequency,
-    load_type,
-    pipeline_required,
-    estimated_data_volume,
-    transformation_rules,
-    business_logic,
-    dependencies,
-    engineering_notes,
-    status,
-    jira_ticket,
-    jira_link
+            request_id,
+            ", ".join(selected_source_systems),
+            database_name,
+            schema_name,
+            source_tables,
+            fact_table,
+            granularity,
+            transaction_date_field,
+            ", ".join(selected_dimensions),
+            primary_keys,
+            foreign_keys,
+            join_logic,
+            ", ".join(selected_kpis),
+            calculations,
+            business_rules,
+            exclusion_rules,
+            refresh_frequency,
+            load_type,
+            historical_data_required,
+            history_years,
+            row_level_security,
+            security_rules,
+            ", ".join(output_tools),
+            export_required,
+            model_type,
+            existing_model,
+            existing_model_name,
+            expected_users,
+            estimated_dataset_size,
+            performance_notes,
+            status,
+            jira_ticket,
+            jira_link,
+            engineering_notes
 
-])
+        ])
 
+        st.success(
+            "✅ Engineering Requirements Saved Successfully"
+        )
 

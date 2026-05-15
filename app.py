@@ -701,10 +701,10 @@ if submit_button:
             f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
         )
 
-    st.success(
-    f"✅ Jira Ticket Created: {jira_ticket}"
-    )
-    
+        st.success(
+        f"✅ Jira Ticket Created: {jira_ticket}"
+        )
+        
     st.link_button(
         "Open Jira Ticket",
         jira_link

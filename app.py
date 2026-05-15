@@ -675,31 +675,31 @@ if submit_button:
 
         try:
 
-        jira_ticket = create_jira_ticket(
-    
-            request_id,
-            report_name,
-            requested_by,
-            priority,
-            report_purpose,
-            ", ".join(all_visible_filters),
-            ", ".join(all_hidden_filters),
-            developer_name
-    
+            jira_ticket = create_jira_ticket(
+        
+                request_id,
+                report_name,
+                requested_by,
+                priority,
+                report_purpose,
+                ", ".join(all_visible_filters),
+                ", ".join(all_hidden_filters),
+                developer_name
+        
+            )
+        
+            st.success(
+                f"✅ Jira Ticket Created: {jira_ticket}"
+            )
+        
+        except Exception as e:
+        
+            st.error(
+                f"Jira Error: {e}"
+            )
+            jira_link = (
+            f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
         )
-    
-        st.success(
-            f"✅ Jira Ticket Created: {jira_ticket}"
-        )
-    
-    except Exception as e:
-    
-        st.error(
-            f"Jira Error: {e}"
-        )
-        jira_link = (
-        f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
-    )
 
     st.success(
     f"✅ Jira Ticket Created: {jira_ticket}"

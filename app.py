@@ -673,7 +673,7 @@ if submit_button:
                 "Request saved but email failed"
             )
 
-        try:
+       try:
 
             jira_ticket = create_jira_ticket(
         
@@ -688,8 +688,21 @@ if submit_button:
         
             )
         
+            jira_link = (
+                f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
+            )
+        
             st.success(
                 f"✅ Jira Ticket Created: {jira_ticket}"
+            )
+        
+            st.link_button(
+                "Open Jira Ticket",
+                jira_link
+            )
+        
+            st.write(
+                f"Jira Link: {jira_link}"
             )
         
         except Exception as e:
@@ -697,22 +710,3 @@ if submit_button:
             st.error(
                 f"Jira Error: {e}"
             )
-            jira_link = (
-            f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
-        )
-
-        st.success(
-        f"✅ Jira Ticket Created: {jira_ticket}"
-        )
-        
-    st.link_button(
-        "Open Jira Ticket",
-        jira_link
-    )
-    JIRA LINK:
-
-    {jira_link}
-
-    except Exception as e:
-
-        st.error(e)

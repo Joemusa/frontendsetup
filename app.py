@@ -676,9 +676,7 @@ if submit_button:
 # 1. Create Jira Ticket
 
 try:
-
     jira_ticket = create_jira_ticket(
-
         request_id,
         report_name,
         requested_by,

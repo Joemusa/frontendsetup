@@ -12,6 +12,11 @@ from email.mime.multipart import MIMEMultipart
 
 from google.oauth2 import service_account
 
+
+request_tab, engineer_tab = st.tabs([
+    "📋 Report Request Form",
+    "⚙️ Data Engineering"
+])
 # =========================================================
 # PAGE CONFIG
 # =========================================================

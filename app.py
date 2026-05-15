@@ -20,7 +20,7 @@ request_tab, engineer_tab = st.tabs([
 
 with request_tab:
 
-    st.title("📋 Front-End Report Setup")
+  
     # =========================================================
     # PAGE CONFIG
     # =========================================================

@@ -3,6 +3,7 @@ import pandas as pd
 import uuid
 import smtplib
 import gspread
+from jira import JIRA
 
 from datetime import datetime
 
@@ -48,6 +49,87 @@ for key, value in default_values.items():
 
         st.session_state[key] = value
 
+# =========================================================
+# JIRA CONNECTION
+# =========================================================
+
+jira_options = {
+    'server': st.secrets["jira"]["server"]
+}
+
+jira = JIRA(
+    options=jira_options,
+    basic_auth=(
+        st.secrets["jira"]["email"],
+        st.secrets["jira"]["api_token"]
+    )
+)
+
+def create_jira_ticket(
+
+    request_id,
+    report_name,
+    requested_by,
+    priority,
+    report_purpose,
+    visible_filters,
+    hidden_filters,
+    developer_name
+
+):
+
+    issue_dict = {
+
+        'project': {
+            'key': st.secrets["jira"]["project_key"]
+        },
+
+        'summary': f"{request_id} - {report_name}",
+
+        'description': f"""
+
+REQUEST ID:
+{request_id}
+
+REQUESTED BY:
+{requested_by}
+
+PRIORITY:
+{priority}
+
+ASSIGNED DEVELOPER:
+{developer_name}
+
+====================================================
+
+REPORT PURPOSE
+
+{report_purpose}
+
+====================================================
+
+VISIBLE FILTERS
+
+{visible_filters}
+
+====================================================
+
+HIDDEN FILTERS
+
+{hidden_filters}
+
+        """,
+
+        'issuetype': {
+            'name': 'Task'
+        }
+    }
+
+    new_issue = jira.create_issue(
+        fields=issue_dict
+    )
+
+    return new_issue.key
 # =========================================================
 # GOOGLE AUTH
 # =========================================================
@@ -530,6 +612,7 @@ if submit_button:
         sheet.append_row([
 
             request_id,
+            jira_ticket,
             str(datetime.now()),
             report_name,
             client_name,
@@ -589,6 +672,34 @@ if submit_button:
             st.warning(
                 "Request saved but email failed"
             )
+
+        jira_ticket = create_jira_ticket(
+    
+        request_id,
+        report_name,
+        requested_by,
+        priority,
+        report_purpose,
+        ", ".join(all_visible_filters),
+        ", ".join(all_hidden_filters),
+        developer_name
+    
+    )
+        jira_link = (
+        f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
+    )
+
+    st.success(
+    f"✅ Jira Ticket Created: {jira_ticket}"
+    )
+    
+    st.link_button(
+        "Open Jira Ticket",
+        jira_link
+    )
+    JIRA LINK:
+
+    {jira_link}
 
     except Exception as e:
 

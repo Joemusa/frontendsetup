@@ -609,6 +609,40 @@ if submit_button:
 
     try:
 
+        # =====================================================
+        # CREATE JIRA TICKET
+        # =====================================================
+
+        jira_ticket = create_jira_ticket(
+
+            request_id,
+            report_name,
+            requested_by,
+            priority,
+            report_purpose,
+            ", ".join(all_visible_filters),
+            ", ".join(all_hidden_filters),
+            developer_name
+
+        )
+
+        jira_link = (
+            f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
+        )
+
+        st.success(
+            f"✅ Jira Ticket Created: {jira_ticket}"
+        )
+
+        st.link_button(
+            "Open Jira Ticket",
+            jira_link
+        )
+
+        # =====================================================
+        # SAVE TO GOOGLE SHEETS
+        # =====================================================
+
         sheet.append_row([
 
             request_id,
@@ -630,19 +664,18 @@ if submit_button:
             ", ".join(selected_meta_actions),
             ", ".join(selected_presentation_actions),
             exception_report_required,
-            exception_report_required, 
             additional_notes,
             "New"
 
         ])
 
         st.success(
-            "✅ Request Submitted Successfully"
-        )
-
-        st.success(
             "📄 Request Saved To Google Sheets"
         )
+
+        # =====================================================
+        # GOOGLE SHEET LINK
+        # =====================================================
 
         sheet_link = (
             f"https://docs.google.com/spreadsheets/d/"
@@ -653,12 +686,18 @@ if submit_button:
             f"### [📂 Open Google Sheet]({sheet_link})"
         )
 
+        # =====================================================
+        # SEND EMAIL
+        # =====================================================
+
         email_sent = send_email(
+
             developer_email,
             request_id,
             report_name,
             requested_by,
             priority
+
         )
 
         if email_sent:
@@ -673,60 +712,16 @@ if submit_button:
                 "Request saved but email failed"
             )
 
-# 1. Create Jira Ticket
+        # =====================================================
+        # FINAL SUCCESS
+        # =====================================================
 
-try:
-    jira_ticket = create_jira_ticket(
-        request_id,
-        report_name,
-        requested_by,
-        priority,
-        report_purpose,
-        ", ".join(all_visible_filters),
-        ", ".join(all_hidden_filters),
-        developer_name
+        st.success(
+            "✅ Request Submitted Successfully"
+        )
 
-    )
+    except Exception as e:
 
-    jira_link = (
-        f"{st.secrets['jira']['server']}/browse/{jira_ticket}"
-    )
-
-    st.success(
-        f"✅ Jira Ticket Created: {jira_ticket}"
-    )
-
-    st.link_button(
-        "Open Jira Ticket",
-        jira_link
-    )
-
-except Exception as e:
-
-    st.error(
-        f"Jira Error: {e}"
-    )
-
-# 2. Send Email
-
-email_sent = send_email(
-    developer_email,
-    request_id,
-    report_name,
-    requested_by,
-    priority
-)
-
-# 3. Email Success Message
-
-if email_sent:
-
-    st.success(
-        "📧 Developer notification sent"
-    )
-
-else:
-
-    st.warning(
-        "Request saved but email failed"
-    )
+        st.error(
+            f"Submission Error: {e}"
+        )

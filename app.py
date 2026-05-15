@@ -734,12 +734,20 @@ with request_tab:
             st.error(
                 f"Submission Error: {e}"
             )
-# Adding a Data Engineering Tab to Your Streamlit App
-
-
-
 
 with engineer_tab:
+
+    # =====================================================
+    # WORKSHEETS
+    # =====================================================
+    
+    sheet = spreadsheet.worksheet(
+        "Requests"
+    )
+    
+    engineering_sheet = spreadsheet.worksheet(
+        "Data_Engineering"
+    )
 
     st.title("⚙️ Data Engineering Workspace")
 

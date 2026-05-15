@@ -404,7 +404,17 @@ exception_report_required = st.radio(
     ["Yes", "No"],
     horizontal=True
 )
+# =========================================================
+# USAGE REPORT
+# =========================================================
 
+st.subheader("📈 Usage Report")
+
+usage_report_required = st.radio(
+    "Enable Usage Report?",
+    ["Yes", "No"],
+    horizontal=True
+)
 # =========================================================
 # QUERY ACTIONS
 # =========================================================
@@ -534,6 +544,8 @@ if submit_button:
             ", ".join(selected_query_actions),
             ", ".join(selected_meta_actions),
             ", ".join(selected_presentation_actions),
+            exception_report_required,
+            exception_report_required, 
             additional_notes,
             "New"
 

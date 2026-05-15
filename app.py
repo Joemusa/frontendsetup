@@ -735,6 +735,7 @@ with request_tab:
                 f"Submission Error: {e}"
             )
 
+
 # =====================================================
 # DATA MODEL REQUIREMENTS TAB
 # =====================================================
@@ -745,25 +746,11 @@ with model_tab:
         "⚙️ Data Model Requirements"
     )
 
-    # =====================================================
-    # GOOGLE SHEETS WORKSHEETS
-    # =====================================================
+    engineering_request_id = (
 
-    sheet = spreadsheet.worksheet(
-        "Requests"
-    )
-
-    engineering_sheet = spreadsheet.worksheet(
-        "Data_Engineering"
-    )
-
-    # =====================================================
-    # REQUEST ID
-    # =====================================================
-
-    request_id = (
         f"ENG-{datetime.now().year}-"
         f"{str(uuid.uuid4())[:8]}"
+
     )
 
     # =====================================================
@@ -782,8 +769,7 @@ with model_tab:
         "Snowflake",
         "Excel",
         "API",
-        "SharePoint",
-        "Google Sheets"
+        "SharePoint"
 
     ]
 
@@ -795,14 +781,14 @@ with model_tab:
 
     )
 
-    custom_source_system = st.text_input(
+    custom_source = st.text_input(
         "Add Custom Source System"
     )
 
-    if custom_source_system:
+    if custom_source:
 
         selected_source_systems.append(
-            custom_source_system
+            custom_source
         )
 
     database_name = st.text_input(
@@ -822,7 +808,7 @@ with model_tab:
     # =====================================================
 
     st.subheader(
-        "📊 Fact Table Information"
+        "📊 Fact Table"
     )
 
     fact_table = st.text_input(
@@ -835,18 +821,14 @@ with model_tab:
 
         [
 
-            "One row per transaction",
-            "One row per customer",
-            "One row per product",
-            "One row per invoice",
-            "One row per store",
-            "Other"
+            "Transaction",
+            "Customer",
+            "Store",
+            "Product",
+            "Invoice"
 
         ]
-    )
 
-    transaction_date_field = st.text_input(
-        "Transaction Date Field"
     )
 
     # =====================================================
@@ -862,12 +844,9 @@ with model_tab:
         "Customer",
         "Product",
         "Calendar",
-        "Retailer",
         "Store",
         "Region",
-        "Employee",
-        "Supplier",
-        "Brand"
+        "Retailer"
 
     ]
 
@@ -890,31 +869,11 @@ with model_tab:
         )
 
     # =====================================================
-    # RELATIONSHIPS
-    # =====================================================
-
-    st.subheader(
-        "🔗 Relationships"
-    )
-
-    primary_keys = st.text_area(
-        "Primary Keys"
-    )
-
-    foreign_keys = st.text_area(
-        "Foreign Keys"
-    )
-
-    join_logic = st.text_area(
-        "Join Logic"
-    )
-
-    # =====================================================
     # KPIs
     # =====================================================
 
     st.subheader(
-        "📈 KPIs / Measures"
+        "📈 KPIs"
     )
 
     available_kpis = [
@@ -924,10 +883,7 @@ with model_tab:
         "Margin",
         "Profit",
         "CSL",
-        "Fill Rate",
-        "Stock",
-        "Availability",
-        "Market Share"
+        "Stock"
 
     ]
 
@@ -965,10 +921,6 @@ with model_tab:
         "Business Rules"
     )
 
-    exclusion_rules = st.text_area(
-        "Exclusion Rules"
-    )
-
     # =====================================================
     # REFRESH REQUIREMENTS
     # =====================================================
@@ -986,10 +938,10 @@ with model_tab:
             "Hourly",
             "Daily",
             "Weekly",
-            "Monthly",
-            "Real-Time"
+            "Monthly"
 
         ]
+
     )
 
     load_type = st.selectbox(
@@ -999,30 +951,9 @@ with model_tab:
         [
 
             "Full Load",
-            "Incremental Load"
+            "Incremental"
 
         ]
-    )
-
-    historical_data_required = st.selectbox(
-
-        "Historical Data Required?",
-
-        [
-
-            "Yes",
-            "No"
-
-        ]
-    )
-
-    history_years = st.number_input(
-
-        "Years of History",
-
-        min_value=0,
-        max_value=20,
-        value=3
 
     )
 
@@ -1031,12 +962,12 @@ with model_tab:
     # =====================================================
 
     st.subheader(
-        "🔐 Security Requirements"
+        "🔐 Security"
     )
 
     row_level_security = st.selectbox(
 
-        "Row Level Security Required?",
+        "Row Level Security",
 
         [
 
@@ -1044,6 +975,7 @@ with model_tab:
             "No"
 
         ]
+
     )
 
     security_rules = st.text_area(
@@ -1067,27 +999,15 @@ with model_tab:
             "Power BI",
             "Pyramid",
             "Excel",
-            "API",
             "CSV",
-            "Google Sheets"
+            "API"
 
         ]
-    )
 
-    export_required = st.selectbox(
-
-        "Export Required?",
-
-        [
-
-            "Yes",
-            "No"
-
-        ]
     )
 
     # =====================================================
-    # MODEL DESIGN
+    # MODEL TYPE
     # =====================================================
 
     st.subheader(
@@ -1106,97 +1026,7 @@ with model_tab:
             "Data Mart"
 
         ]
-    )
 
-    existing_model = st.selectbox(
-
-        "Existing Model Available?",
-
-        [
-
-            "Yes",
-            "No"
-
-        ]
-    )
-
-    existing_model_name = st.text_input(
-        "Existing Model Name"
-    )
-
-    # =====================================================
-    # PERFORMANCE
-    # =====================================================
-
-    st.subheader(
-        "⚡ Performance Requirements"
-    )
-
-    expected_users = st.number_input(
-
-        "Expected Number of Users",
-
-        min_value=1,
-        value=10
-
-    )
-
-    estimated_dataset_size = st.selectbox(
-
-        "Estimated Dataset Size",
-
-        [
-
-            "Small",
-            "Medium",
-            "Large",
-            "Very Large"
-
-        ]
-    )
-
-    performance_notes = st.text_area(
-        "Performance Notes"
-    )
-
-    # =====================================================
-    # STATUS
-    # =====================================================
-
-    st.subheader(
-        "📌 Request Status"
-    )
-
-    status = st.selectbox(
-
-        "Status",
-
-        [
-
-            "New",
-            "In Progress",
-            "Waiting for Business",
-            "In Testing",
-            "Completed",
-            "Blocked"
-
-        ]
-    )
-
-    # =====================================================
-    # JIRA
-    # =====================================================
-
-    st.subheader(
-        "🎫 Jira Tracking"
-    )
-
-    jira_ticket = st.text_input(
-        "Jira Ticket"
-    )
-
-    jira_link = st.text_input(
-        "Jira Link"
     )
 
     # =====================================================
@@ -1211,60 +1041,160 @@ with model_tab:
         "Engineering Notes"
     )
 
-    # =====================================================
-    # SAVE BUTTON
-    # =====================================================
+    engineer_email = st.text_input(
+        "Engineer Email"
+    )
 
-    submit_engineering = st.button(
-        "💾 Save Engineering Requirements"
+    engineering_priority = st.selectbox(
+
+        "Priority",
+
+        [
+
+            "Highest",
+            "High",
+            "Medium",
+            "Low"
+
+        ]
+
     )
 
     # =====================================================
-    # SAVE TO GOOGLE SHEETS
+    # SUBMIT
     # =====================================================
+
+    submit_engineering = st.button(
+        "🚀 Submit Engineering Request"
+    )
 
     if submit_engineering:
 
-        engineering_sheet.append_row([
+        engineering_description = f"""
 
-            request_id,
-            ", ".join(selected_source_systems),
-            database_name,
-            schema_name,
-            source_tables,
-            fact_table,
-            granularity,
-            transaction_date_field,
-            ", ".join(selected_dimensions),
-            primary_keys,
-            foreign_keys,
-            join_logic,
-            ", ".join(selected_kpis),
-            calculations,
-            business_rules,
-            exclusion_rules,
-            refresh_frequency,
-            load_type,
-            historical_data_required,
-            history_years,
-            row_level_security,
-            security_rules,
-            ", ".join(output_tools),
-            export_required,
-            model_type,
-            existing_model,
-            existing_model_name,
-            expected_users,
-            estimated_dataset_size,
-            performance_notes,
-            status,
-            jira_ticket,
-            jira_link,
-            engineering_notes
+ENGINEERING REQUEST ID:
+{engineering_request_id}
 
-        ])
+SOURCE SYSTEMS:
+{", ".join(selected_source_systems)}
 
-        st.success(
-            "✅ Engineering Requirements Saved Successfully"
-        )
+DATABASE:
+{database_name}
+
+SCHEMA:
+{schema_name}
+
+SOURCE TABLES:
+{source_tables}
+
+FACT TABLE:
+{fact_table}
+
+GRANULARITY:
+{granularity}
+
+DIMENSIONS:
+{", ".join(selected_dimensions)}
+
+KPIs:
+{", ".join(selected_kpis)}
+
+CALCULATIONS:
+{calculations}
+
+BUSINESS RULES:
+{business_rules}
+
+REFRESH:
+{refresh_frequency}
+
+LOAD TYPE:
+{load_type}
+
+ROW LEVEL SECURITY:
+{row_level_security}
+
+SECURITY RULES:
+{security_rules}
+
+OUTPUT TOOLS:
+{", ".join(output_tools)}
+
+MODEL TYPE:
+{model_type}
+
+ENGINEERING NOTES:
+{engineering_notes}
+
+"""
+
+        try:
+
+            jira_ticket = create_jira_ticket(
+
+                f"Data Model - {fact_table}",
+                engineering_description,
+                engineering_priority
+
+            )
+
+            jira_link = (
+
+                f"{st.secrets['jira']['server']}"
+                f"/browse/{jira_ticket}"
+
+            )
+
+            st.success(
+                f"✅ Jira Ticket Created: {jira_ticket}"
+            )
+
+            st.link_button(
+                "🎫 Open Jira Ticket",
+                jira_link
+            )
+
+            email_sent = send_email(
+
+                engineer_email,
+                engineering_request_id,
+                fact_table,
+                engineering_priority,
+                jira_link
+
+            )
+
+            if email_sent:
+
+                st.success(
+                    "📧 Engineer notified successfully"
+                )
+
+        except Exception as e:
+
+            st.error(
+                f"Jira Error: {e}"
+            )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
